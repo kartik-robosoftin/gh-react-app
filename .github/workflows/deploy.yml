@@ -1,18 +1,19 @@
 name: Pull docker image and deploy
-on: [workflow_dispatch]
-inputs:
-  docker-image-tag:
-    type: string
-    description: Docker image tag to use for deploying
-    required: false
-    default: latest
-  environment:
-    type: choice
-    description: Environment to deploy the Docker image
-    options:
-      - Dev
-      - UAT
-      - Prod
+on:
+  workflow_dispatch:
+    inputs:
+      docker-image-tag:
+        type: string
+        description: Docker image tag to use for deploying
+        required: false
+        default: latest
+      environment:
+        type: choice
+        description: Environment to deploy the Docker image
+        options:
+          - Dev
+          - UAT
+          - Prod
 
 jobs:
   pull_and_deploy:
