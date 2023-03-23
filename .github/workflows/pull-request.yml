@@ -67,4 +67,4 @@ jobs:
               body: 'Dev URL: https://dev.example.com'
             })
       - name: Add run summary
-        run: echo '### Deployed Successfully!   URL => https://dev.example.com  docker image version => ${{ steps.package.outputs.VERSION }}' >> $GITHUB_STEP_SUMMARY
+        run: echo -e '### Deployed Successfully!\n\nURL => https://dev.example.com\nDocker image version => ${{ steps.package.outputs.VERSION }}' >> $GITHUB_STEP_SUMMARY
