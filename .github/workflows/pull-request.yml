@@ -29,7 +29,6 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      BUILD: dev+$GITHUB_SHA
     permissions:
       pull-requests: write
     steps:
@@ -40,9 +39,9 @@ jobs:
         run: env
       - name: Get package.json version
         id: package
-        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}' >> $GITHUB_OUTPUT
+        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}-dev+$GITHUB_SHA' >> $GITHUB_OUTPUT
       - name: Build docker image
-        run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}-$BUILD .
+        run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
       - name: Login to Dockerhub
         uses: docker/login-action@v2
         with:
@@ -51,7 +50,7 @@ jobs:
       - name: Push imgae to Dockerhub
         run: |
           docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
-          docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}-$BUILD
+          docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}
       - name: Print output
         run: |
           echo "Deploying..."
@@ -68,4 +67,4 @@ jobs:
               body: 'Dev URL: https://dev.example.com'
             })
       - name: Add run summary
-        run: echo '### Deployed Successfully!\s\s URL => https://dev.example.com\s\s Docker image => ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}-$BUILD' >> $GITHUB_STEP_SUMMARY
+        run: echo '### Deployed Successfully!\s\s URL => https://dev.example.com\s\s Docker image => ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}' >> $GITHUB_STEP_SUMMARY
