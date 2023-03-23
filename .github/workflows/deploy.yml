@@ -21,11 +21,11 @@ jobs:
     steps:
       - name: Get docker image tag and environment info and pull docker image
         id: docker-pull
-        run: echo "result=$(docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }})" >> $GITHUB_OUTPUT
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }}
       - name: Display error message
         if: ${{ failure() }}
         run: |
-          echo -e "###Error while pulling docker image:\n${{ steps.docker-pull.outputs.result }}" >> $GITHUB_STEP_SUMMARY
+          echo -e "### Error while pulling docker image!" >> $GITHUB_STEP_SUMMARY
           exit 0
       - name: Deploy
         shell: bash
