@@ -29,20 +29,26 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      VERSION_TAG: dev+$GITHUB_SHA
     permissions:
       pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - run: echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
+      - name: print env
+        run: env
       - name: Build docker image
-        run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:$GITHUB_SHA .
+        run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:$fromJson(env.PACKAGE_JSON).version-$VERSION_TAG .
       - name: Login to Dockerhub
         uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
       - name: Push imgae to Dockerhub
-        run: docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:$GITHUB_SHA
+        run: |
+          docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
+          docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:$fromJson(env.PACKAGE_JSON).version-$VERSION_TAG
       - name: Print output
         run: |
           echo "Deploying..."
@@ -58,3 +64,5 @@ jobs:
               repo: context.repo.repo,
               body: 'Dev URL: https://dev.example.com'
             })
+      - name: Add run summary
+        run: echo '### Deployed Successfully!\s\s URL => https://dev.example.com\s\s Docker image => ${{ env.DOCKER_USERNAME }}/gh-react-app:$fromJson(env.PACKAGE_JSON).version-$VERSION_TAG' >>> $GITHUB_STEP_SUMMARY
