@@ -67,4 +67,4 @@ jobs:
               body: 'Dev URL: https://dev.example.com'
             })
       - name: Add run summary
-        run: echo '### Deployed Successfully!\s\s URL => https://dev.example.com\s\s Docker image => ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}' >> $GITHUB_STEP_SUMMARY
+        run: echo '### Deployed Successfully!   URL => https://dev.example.com  docker image version => ${{ steps.package.outputs.VERSION }}' >> $GITHUB_STEP_SUMMARY
