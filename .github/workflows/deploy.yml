@@ -22,4 +22,4 @@ jobs:
       - name: Get docker image tag and environment info and pull docker image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }}
       - name: Deploy
-        run: echo "URL:https://${{ github.event.inputs.environment }} | sed -e 's/\(.*\)/\L\1/'-example.com"
+        run: echo "URL:https://${{ github.event.inputs.environment | sed -e 's/\(.*\)/\L\1/ }}'-example.com"
