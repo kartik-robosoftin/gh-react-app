@@ -20,9 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get docker image tag and environment info and pull docker image
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }}
+        id: docker-pull
+        run: echo "result=$(docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }})" >> $GITHUB_OUTPUT
+      - name: Display error message
+        if: ${{ failure() }}
+        run: |
+          echo -e "###Error while pulling docker image:\n${{ steps.docker-pull.outputs.result }}" >> $GITHUB_STEP_SUMMARY
+          exit 1
       - name: Deploy
         shell: bash
         run: |
+          echo "Deploying..."
           environment_name=$(echo ${{ github.event.inputs.environment }} | tr '[:upper:]' '[:lower:]')
-          echo "URL:https://$environment_name-example.com"
+          echo "URL:https://$environment_name-example.com" >> $GITHUB_STEP_SUMMARY
