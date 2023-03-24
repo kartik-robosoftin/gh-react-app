@@ -1,0 +1,30 @@
+name: Lint, unit test and build
+description: installs dependencies, check code quality, run unit tests and build app
+inputs:
+  skip-lint:
+    description: Whether to skip running npm lint
+    required: false
+    default: "false"
+  skip-unit-test:
+    description: Whether to skip running npm test
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install dependencies
+      id: install-deps
+      run: npm install
+    - name: Check lint
+      if: ${{ steps.install-deps.outcome == 'success' && inputs.skip-lint == 'false' }}
+      run: npm run lint
+    - name: Unit test
+      if: ${{ steps.install-deps.outcome == 'success' && inputs.skip-unit-test == 'false' }}
+      env:
+        CI: true
+      run: npm run test
+    - name: Build app
+      run: npm run build
