@@ -1,4 +1,4 @@
-name: Pull docker image and deploy
+name: Manual Depoly
 on:
   workflow_dispatch:
     inputs:
