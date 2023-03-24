@@ -17,7 +17,7 @@ jobs:
   build_and_push_docker_img:
     needs: lint_and_build
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'main' }}
+    if: ${{ github.base_ref == 'main' && github.head_ref == 'develop' }}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
