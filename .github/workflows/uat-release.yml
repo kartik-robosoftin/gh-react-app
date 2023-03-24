@@ -8,12 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        run: npm install
       - name: Build app
-        run: npm run build
+        uses: ./.github/actions/lint-and-build
+        with:
+          skip-lint: true
+          skip-unit-test: true
+
   build_and_push_docker_img:
     needs: build
     runs-on: ubuntu-latest

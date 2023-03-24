@@ -9,18 +9,8 @@ jobs:
   lint_and_build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        run: npm install
-      - name: Check lint
-        run: npm run lint
-      - name: Unit test
-        env:
-          CI: true
-        run: npm run test
-      - name: Build app
-        run: npm run build
+      - name: Lint, test and build
+        uses: ./.github/actions/lint-and-build
 
   build_and_push_docker_img:
     needs: lint_and_build
