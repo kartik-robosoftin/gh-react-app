@@ -15,6 +15,11 @@ jobs:
         with:
           skip-lint: true
           skip-unit-test: true
+      - name: Display error message
+        if: ${{ failure() }}
+        run: |
+          echo -e "### Error while building the app!" >> $GITHUB_STEP_SUMMARY
+          exit 0
 
   build_and_push_docker_img:
     needs: build
