@@ -26,7 +26,7 @@ jobs:
       - run: echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
       - name: Get package.json version
         id: package
-        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}-${{ github.sha }}' >> $GITHUB_OUTPUT
+        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}+${{ github.run_attempt }}' >> $GITHUB_OUTPUT
       - name: Build docker image
         run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
       - name: Login to Dockerhub
