@@ -9,6 +9,8 @@ jobs:
   lint_and_build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Lint, test and build
         uses: ./.github/actions/lint-and-build
 
@@ -29,7 +31,7 @@ jobs:
         run: env
       - name: Get package.json version
         id: package
-        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}-dev.${{ github.sha }}' >> $GITHUB_OUTPUT
+        run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}-dev-${{ github.run_attempt }}' >> $GITHUB_OUTPUT
       - name: Build docker image
         run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
       - name: Login to Dockerhub
