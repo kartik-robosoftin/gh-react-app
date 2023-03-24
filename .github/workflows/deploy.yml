@@ -30,6 +30,6 @@ jobs:
       - name: Deploy
         shell: bash
         run: |
-          echo "Deploying..."
+          echo "Deploying in ${{ github.event.inputs.environment }}..."
           environment_name=$(echo ${{ github.event.inputs.environment }} | tr '[:upper:]' '[:lower:]')
-          echo "URL:https://$environment_name-example.com" >> $GITHUB_STEP_SUMMARY
+          echo "URL:https://$environment_name.example.com" >> $GITHUB_STEP_SUMMARY
