@@ -16,13 +16,17 @@ runs:
     - name: Install dependencies
       id: install-deps
       run: npm install
+      shell: bash
     - name: Check lint
       if: ${{ steps.install-deps.outcome == 'success' && inputs.skip-lint == 'false' }}
       run: npm run lint
+      shell: bash
     - name: Unit test
       if: ${{ steps.install-deps.outcome == 'success' && inputs.skip-unit-test == 'false' }}
       env:
         CI: true
       run: npm run test
+      shell: bash
     - name: Build app
       run: npm run build
+      shell: bash
