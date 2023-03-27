@@ -4,15 +4,30 @@ inputs:
   tag-name:
     required: true
     type: string
+  token:
+    description: GitHub token
+    required: true
+    type: string
 
 runs:
   using: composite
   steps:
     - run: echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
       shell: bash
+    - name: Create tag
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ inputs.token }}
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/v${{ fromJson(env.PACKAGE_JSON).version }}',
+            sha: context.sha
+          })
     - name: Get package.json version
       id: package
-      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ github.run_attempt }}' >> $GITHUB_OUTPUT
+      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ github.sha }}' >> $GITHUB_OUTPUT
       shell: bash
     - name: Build docker image
       run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
@@ -24,7 +39,8 @@ runs:
         password: ${{ env.DOCKER_PASSWORD }}
     - name: Push imgae to Dockerhub
       run: |
-        docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
+        # skip :latest tagged image
+        # docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
         docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}
       shell: bash
     - name: Print output
