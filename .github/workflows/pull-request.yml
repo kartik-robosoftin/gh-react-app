@@ -30,6 +30,7 @@ jobs:
         uses: "./.github/actions/build-docker-image"
         with:
           tag-name: "dev"
+          token: ${{ github.token }}
       - name: Comment PR
         uses: actions/github-script@v6
         with:
