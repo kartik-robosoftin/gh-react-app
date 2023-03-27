@@ -25,9 +25,13 @@ runs:
             ref: 'refs/tags/v${{ fromJson(env.PACKAGE_JSON).version }}',
             sha: context.sha
           })
+    - name: Generate build number
+      uses: onyxmueller/build-tag-number@v1
+      with:
+        token: ${{ inputs.token }}
     - name: Get package.json version
       id: package
-      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ github.sha }}' >> $GITHUB_OUTPUT
+      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-$BUILD_NUMBER' >> $GITHUB_OUTPUT
       shell: bash
     - name: Build docker image
       run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
