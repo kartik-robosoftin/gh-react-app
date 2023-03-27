@@ -24,7 +24,8 @@ runs:
         password: ${{ env.DOCKER_PASSWORD }}
     - name: Push imgae to Dockerhub
       run: |
-        docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
+        # skip :latest tagged image
+        # docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:latest
         docker push ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }}
       shell: bash
     - name: Print output
