@@ -39,7 +39,7 @@ runs:
     - name: Get package.json version
       if: steps.check-tag.outputs.tagged == 1
       id: package
-      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-$BUILD_NUMBER' >> $GITHUB_OUTPUT
+      run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ env.BUILD_NUMBER }}' >> $GITHUB_OUTPUT
       shell: bash
     - name: Build docker image
       run: docker build -t ${{ env.DOCKER_USERNAME }}/gh-react-app:latest -t ${{ env.DOCKER_USERNAME }}/gh-react-app:${{ steps.package.outputs.VERSION }} .
