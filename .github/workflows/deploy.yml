@@ -5,8 +5,7 @@ on:
       docker-image-tag:
         type: string
         description: Docker image tag to use for deploying
-        required: false
-        default: latest
+        required: true
       environment:
         type: choice
         description: Environment to deploy the Docker image
