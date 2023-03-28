@@ -14,7 +14,13 @@ runs:
   steps:
     - run: echo "PACKAGE_JSON=$(jq -c . < package.json)" >> $GITHUB_ENV
       shell: bash
+    - name: Check if tag already exists
+      id: check-tag
+      run: |
+        git show-ref --tags --verify --quiet -- "refs/tags/v${{ fromJson(env.PACKAGE_JSON).version }}" && echo "tagged=1" >> $GITHUB_OUTPUT || echo "tagged=0" >> $GITHUB_OUTPUT
+      shell: bash
     - name: Create tag
+      if: steps.check-tag.outputs.tagged == 0
       uses: actions/github-script@v6
       with:
         github-token: ${{ inputs.token }}
@@ -26,10 +32,12 @@ runs:
             sha: context.sha
           })
     - name: Generate build number
+      if: steps.check-tag.outputs.tagged == 1
       uses: onyxmueller/build-tag-number@v1
       with:
         token: ${{ inputs.token }}
     - name: Get package.json version
+      if: steps.check-tag.outputs.tagged == 1
       id: package
       run: echo 'VERSION=${{ fromJson(env.PACKAGE_JSON).version }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-$BUILD_NUMBER' >> $GITHUB_OUTPUT
       shell: bash
