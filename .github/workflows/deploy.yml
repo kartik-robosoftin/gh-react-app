@@ -5,8 +5,7 @@ on:
       docker-image-tag:
         type: string
         description: Docker image tag to use for deploying
-        required: false
-        default: latest
+        required: true
       environment:
         type: choice
         description: Environment to deploy the Docker image
@@ -22,11 +21,13 @@ jobs:
       - name: Get docker image tag and environment info and pull docker image
         id: docker-pull
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/gh-react-app:${{ github.event.inputs.docker-image-tag }}
+
       - name: Display error message
         if: ${{ failure() }}
         run: |
           echo -e "### Error while pulling docker image!" >> $GITHUB_STEP_SUMMARY
           exit 0
+
       - name: Deploy
         shell: bash
         run: |

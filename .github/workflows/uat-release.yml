@@ -10,11 +10,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Build app
         uses: ./.github/actions/lint-and-build
         with:
           skip-lint: true
           skip-unit-test: true
+
       - name: Display error message
         if: ${{ failure() }}
         run: |
@@ -30,6 +32,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Build and push docker image
         uses: "./.github/actions/build-docker-image"
         with:
