@@ -15,33 +15,9 @@ runs:
     - run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
       shell: bash
 
-    - name: Check if tag already exists
-      uses: mukunku/tag-exists-action@v1.2.0
-      id: checkTag
-      with:
-        tag: "v${{ env.VERSION }}"
-
-    - name: Create tag
-      if: ${{ !steps.checkTag.outputs.exists }}
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ inputs.token }}
-        script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'refs/tags/v${{ env.VERSION }}',
-            sha: context.sha
-          })
-
-    - name: Generate build number
-      uses: onyxmueller/build-tag-number@v1
-      with:
-        token: ${{ inputs.token }}
-
     - name: Get package.json version
       id: package
-      run: echo 'version=${{ env.VERSION }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ env.BUILD_NUMBER }}' >> $GITHUB_OUTPUT
+      run: echo 'version=${{ env.VERSION }}${{ inputs.tag-name == 'dev' && '-dev' || ''  }}-${{ github.sha }}' >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Build docker image
