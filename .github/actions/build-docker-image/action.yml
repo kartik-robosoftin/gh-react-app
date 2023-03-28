@@ -12,7 +12,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: echo "VERSION=${{ fromJson($(jq -c . < package.json)).version }}" >> $GITHUB_ENV
+    - run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
       shell: bash
 
     - name: Check if tag already exists
