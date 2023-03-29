@@ -4,43 +4,16 @@ on:
     branches:
       - main
       - develop
-    types: [opened, synchronize]
+
 jobs:
-  lint_and_build:
+  lint_and_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Lint, test and build
-        uses: ./.github/actions/lint-and-build
+      - name: Run lint and unit test
+        uses: ./.github/actions/lint-and-test
 
-  build_and_push_docker_img:
-    needs: lint_and_build
-    runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'main' && github.head_ref == 'develop' }}
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    permissions: write-all
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build and push docker image
-        uses: "./.github/actions/build-docker-image"
-        with:
-          tag-name: "dev"
-          token: ${{ github.token }}
-
-      - name: Comment PR
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Dev URL: https://dev.example.com'
-            })
+      - name: Build app
+        uses: docker/build-push-action@v4
