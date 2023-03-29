@@ -3,32 +3,13 @@ on:
   push:
     branches:
       - "release/**"
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build app
-        uses: ./.github/actions/lint-and-build
-        with:
-          skip-lint: true
-          skip-unit-test: true
-
-      - name: Display error message
-        if: ${{ failure() }}
-        run: |
-          echo -e "### Error while building the app!" >> $GITHUB_STEP_SUMMARY
-          exit 0
-
-  build_and_push_docker_img:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
