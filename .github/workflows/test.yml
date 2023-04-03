@@ -14,6 +14,6 @@ jobs:
       - name: Create slack message header
         id: message-header
         run: |
-          app_name=echo "${{ inputs.FASTLANE_LANE }}" | cut -d " " -f 2 | cut -d_ -f 2
+          app_name=$(echo ${{ env.FASTLANE_LANE }} | cut -d " " -f 2 | cut -d_ -f 2)
           echo "header=$app_name" >> $GITHUB_OUTPUT
       - run: echo "${{ steps.message-header.outputs.header }}"
