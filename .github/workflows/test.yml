@@ -4,49 +4,16 @@ on:
     branches:
       - main
 
+env:
+  FASTLANE_LANE: "android dev_debugAndroidTV"
+
 jobs:
-  log_matrix:
-    strategy:
-      matrix:
-        FASTLANE_LANE:
-          [
-            "android debug_devAndroidTv",
-            "jio debug_devJio",
-            "xiaomi debug_devXiaomiTv",
-            "amazon debug_devFireTv",
-            "aosp debug_devAospStbTv",
-          ]
-        RUN_TYPE: ["debug"]
-        ENV_NAME: ["dev"]
-        include:
-          - FASTLANE_LANE: "android debug_devAndroidTv"
-            BUILD_FLAVOR: "devAndroidTv"
-            PACKAGE_PATH: "./devAndroidTv/debug/app-dev-androidTv-debug.apk"
-            APP_DEVICE: "android"
-          - FASTLANE_LANE: "jio debug_devJio"
-            BUILD_FLAVOR: "devJio"
-            PACKAGE_PATH: "./devJio/debug/app-dev-jio-debug.apk"
-            APP_DEVICE: "jio"
-          - FASTLANE_LANE: "xiaomi debug_devXiaomiTv"
-            BUILD_FLAVOR: "devXiaomiTv"
-            PACKAGE_PATH: "./devXiaomiTv/debug/app-dev-xiaomiTv-debug.apk"
-            APP_DEVICE: "xiaomi"
-          - FASTLANE_LANE: "amazon debug_devFireTv"
-            BUILD_FLAVOR: "devFireTv"
-            PACKAGE_PATH: "./devFireTv/debug/app-dev-fireTv-debug.apk"
-            APP_DEVICE: "amazon"
-          - FASTLANE_LANE: "aosp debug_devAospStbTv"
-            BUILD_FLAVOR: "devAospStbTv"
-            PACKAGE_PATH: "./devAospStbTv/debug/app-dev-aospStbTv-debug.apk"
-            APP_DEVICE: "aosp"
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Print all combination
+      - name: Create slack message header
+        id: message-header
         run: |
-          echo "${{ matrix.FASTLANE_LANE }}"
-          echo "${{ matrix.RUN_TYPE }}"
-          echo "${{ matrix.ENV_NAME }}"
-          echo "${{ matrix.BUILD_FLAVOR }}"
-          echo "${{ matrix.PACKAGE_PATH }}"
-          echo "${{ matrix.APP_DEVICE }}"
+          app_name=echo "${{ inputs.FASTLANE_LANE }}" | cut -d " " -f 2 | cut -d_ -f 2
+          echo "header=$app_name" >> $GITHUB_OUTPUT
+      - run: echo "${{ steps.message-header.outputs.header }}"
