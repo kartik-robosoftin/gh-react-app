@@ -17,3 +17,26 @@ jobs:
           app_name=$(echo ${{ env.FASTLANE_LANE }} | cut -d " " -f 2 | cut -d_ -f 2)
           echo "header=$app_name" >> $GITHUB_OUTPUT
       - run: echo "${{ steps.message-header.outputs.header }}"
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ["android", "jio", "xiaomi", "amazon", "aosp"]
+        include:
+          - platform: "android"
+            lane: "debug_devAndroidTv"
+            app_name: "app 1"
+          - platform: "jio"
+            lane: "debug_devJio"
+            app_name: "JioTV"
+          - platform: "xiaomi"
+            lane: "debug_devXiaomiTv"
+            app_name: "XiaomiTV"
+          - platform: "amazon"
+            lane: "debug_devFireTv"
+            app_name: "FireTV"
+          - lane: "debug_devAospStbTv"
+            app_name: "AOSPTV"
+    steps:
+      - name: print
+        run: echo "${{ matrix.platform }} ${{ matrix.lane }} | ${{ matrix.app_name }}"
