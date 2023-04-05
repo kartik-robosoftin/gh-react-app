@@ -35,7 +35,8 @@ jobs:
           - platform: "amazon"
             lane: "debug_devFireTv"
             app_name: "FireTV"
-          - lane: "debug_devAospStbTv"
+          - platform: "aosp"
+            lane: "debug_devAospStbTv"
             app_name: "AOSPTV"
     steps:
       - name: print
