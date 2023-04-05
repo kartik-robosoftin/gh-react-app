@@ -23,21 +23,11 @@ jobs:
       matrix:
         platform: ["android", "jio", "xiaomi", "amazon", "aosp"]
         include:
-          - platform: "android"
-            lane: "debug_devAndroidTv"
-            app_name: "app 1"
-          - platform: "jio"
-            lane: "debug_devJio"
-            app_name: "JioTV"
-          - platform: "xiaomi"
-            lane: "debug_devXiaomiTv"
-            app_name: "XiaomiTV"
-          - platform: "amazon"
-            lane: "debug_devFireTv"
-            app_name: "FireTV"
-          - platform: "aosp"
-            lane: "debug_devAospStbTv"
-            app_name: "AOSPTV"
+          - app_name: "Discovery-IND-Dev-AndroidTV"
+          - app_name: "Discovery-IND-Dev-JioTV"
+          - app_name: "Discovery-IND-Dev-XiaomiTV"
+          - app_name: "Discovery-IND-Dev-FireTV"
+          - app_name: "Discovery-IND-Dev-AOSPTV"
     steps:
       - name: print
         run: echo "${{ matrix.platform }} ${{ matrix.lane }} | ${{ matrix.app_name }}"
