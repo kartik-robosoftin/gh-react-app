@@ -6,6 +6,7 @@ on:
 
 env:
   FASTLANE_LANE: "android dev_debugAndroidTV"
+  PLATFORM: "android"
 
 jobs:
   test:
@@ -15,7 +16,7 @@ jobs:
         id: message-header
         run: |
           app_name=$(echo ${{ env.FASTLANE_LANE }} | cut -d " " -f 2 | cut -d_ -f 2)
-          echo "header=$app_name" >> $GITHUB_OUTPUT
+          echo "header=app-${{ env.PLATFORM }}TV-$app_name" >> $GITHUB_OUTPUT
       - run: echo "${{ steps.message-header.outputs.header }}"
   build:
     runs-on: ubuntu-latest
