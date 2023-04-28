@@ -1,0 +1,18 @@
+name: Test Exit Code
+on:
+  push:
+    branches:
+      - test/exit-code-221
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check code
+        shell: bash
+        run: |
+          if ! $GREAT ; then
+              echo "not terrible, no free distro available, increase  the numOfDistros in dplus-web-pr-envs stack"
+              exit 221
+          fi
