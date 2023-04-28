@@ -12,6 +12,7 @@ jobs:
       - name: Check code
         shell: bash
         run: |
+          GREAT=false
           if ! $GREAT ; then
               echo "not terrible, no free distro available, increase  the numOfDistros in dplus-web-pr-envs stack"
               exit 221
