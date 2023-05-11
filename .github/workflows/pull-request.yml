@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - develop
+      - release/tnt-sports-launch
 
 jobs:
   lint_and_test:
