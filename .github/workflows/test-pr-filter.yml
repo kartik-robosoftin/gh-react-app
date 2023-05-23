@@ -1,0 +1,22 @@
+name: Echo Date
+
+on:
+  push:
+    branches:
+      - bug/pr-paths
+    paths-ignore:
+      - "README.md"
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+      - "README.md"
+
+jobs:
+  echo-date:
+    runs-on: ubuntu-latest
+    name: "Echo"
+
+    steps:
+      - name: Run echo date
+        run: |
+          echo -e "Hello at $(date -I)"
