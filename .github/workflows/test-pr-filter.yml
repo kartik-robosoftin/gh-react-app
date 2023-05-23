@@ -2,9 +2,6 @@ name: Echo Date
 
 on:
   pull_request:
-    paths-ignore:
-      - "README.md"
-  pull_request:
     types: [opened, synchronize]
     paths-ignore:
       - "README.md"
