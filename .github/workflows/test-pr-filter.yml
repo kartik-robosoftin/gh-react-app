@@ -1,9 +1,7 @@
 name: Echo Date
 
 on:
-  push:
-    branches:
-      - bug/pr-paths
+  pull_request:
     paths-ignore:
       - "README.md"
   pull_request:
