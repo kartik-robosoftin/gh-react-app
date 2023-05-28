@@ -17,7 +17,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: "#test-slack-github-action"
+          channel-id: "C05AJBYBREC"
           payload: |
             {
               "blocks": [
