@@ -1,0 +1,18 @@
+on: push
+
+jobs:
+  install-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Print outputs
+        run: |
+          echo "${{ github.ref }}"
+          node --version
