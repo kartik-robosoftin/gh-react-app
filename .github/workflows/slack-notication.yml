@@ -9,8 +9,7 @@ jobs:
       - name: Prepare
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-          COMMIT_MESSAGE="$(echo "$COMMIT_MESSAGE" | sed -z 's/\n/\\n/g')"
+          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed -z 's/\n/\\n/g')"
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
       - name: Send custom JSON data to Slack workflow
