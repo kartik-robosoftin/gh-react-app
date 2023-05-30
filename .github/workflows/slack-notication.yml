@@ -27,7 +27,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": ":android-robot: Test multiline commit message",
+                    "text": ":android-robot: Test commit message with double quotes",
                     "emoji": true
                   }
                 },
