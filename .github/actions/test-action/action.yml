@@ -1,0 +1,8 @@
+name: Test Action with $TOKEN
+description: Test Action with $TOKEN
+
+runs:
+  using: composite
+  steps:
+    - run: echo $TOKEN
+      shell: bash
