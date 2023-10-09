@@ -9,7 +9,12 @@ jobs:
       - name: Prepare Git commit message
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed -z 's/\n/\\n/g')"
+          if [ ${{ contains(github.event.head_commit.message, '"') }} = true ]; then
+            COMMIT_MESSAGE='${{ contains(github.event.head_commit.message, '"') && github.event.head_commit.message || 'default commit message' }}'
+          else
+            COMMIT_MESSAGE="${{ contains(github.event.head_commit.message, '"') && 'default commit message' || github.event.head_commit.message }}"
+          fi
+          COMMIT_MESSAGE="$(echo $COMMIT_MESSAGE | sed -z 's/\n/\\n/g; s/"//g')"
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
       - name: Send custom JSON data to Slack workflow
