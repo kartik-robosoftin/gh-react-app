@@ -35,7 +35,7 @@ jobs:
 
           and print commit message
 
-          * convert DOS to UNIX format" | tr '\r\n' '\n\r' | sed 's/^\r//g' | tr '\r' '\n')"
+          * convert DOS to UNIX format" | tr '\r\n' '\n\r' | sed 's/^\r//g' | tr '\r' '\n' | sed -z 's/\n/\\n/g')"
           echo "$COMMIT_MESSAGE"
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
