@@ -9,33 +9,7 @@ jobs:
       - name: Prepare Git commit message
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="$(echo "Test/squash n merge (#34)
-
-          * chore: test commit (#341)
-
-          * feat: LAU-17242 jFrog migration
-
-          * change style
-
-          * update slack.yml
-
-          * test: new approach
-
-          * remove 'sed' command
-
-          * test with decimal format
-
-          * decimal value of hardcoded string
-
-          * test
-
-          * replace '\r\n' with '\n'
-
-          * Test: replace CRLF with \n
-
-          and print commit message
-
-          * convert DOS to UNIX format" | tr '\r\n' '\n\r' | sed 's/^\r//g' | tr '\r' '\n' | sed -z 's/\n/\\n/g')"
+          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | tr '\r\n' '\n\r' | sed 's/^\r//g' | tr '\r' '\n' | sed -z 's/\n/\\n/g')"
           echo "$COMMIT_MESSAGE"
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
