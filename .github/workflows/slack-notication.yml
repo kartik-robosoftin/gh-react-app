@@ -9,25 +9,7 @@ jobs:
       - name: Prepare Git commit message
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="$(echo "Test/squash n merge (#28)
-
-          * chore: test commit (#341)
-
-          * feat: LAU-17242 jFrog migration
-
-          * change style
-
-          * update slack.yml
-
-          * test: new approach
-
-          * remove 'sed' command
-
-          * test with decimal format")"
-          echo -n "${COMMIT_MESSAGE}" | xxd -p -c 1 |
-          while read -r line; do
-            echo -n "$(( 16#$line ))"
-          done
+          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed -z 's/\r$//g' | sed -z 's/\n/\\n/g')"
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
       - name: Send custom JSON data to Slack workflow
