@@ -29,10 +29,6 @@ jobs:
             echo -n "$(( 16#$line ))"
           done
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
-          echo -n "${{ github.event.head_commit.message }}" | xxd -p -c 1 |
-          while read -r line; do
-            echo -n "$(( 16#$line ))"
-          done
 
       - name: Send custom JSON data to Slack workflow
         id: slack
