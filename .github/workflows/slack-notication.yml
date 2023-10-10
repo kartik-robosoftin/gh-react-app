@@ -11,6 +11,7 @@ jobs:
         run: |
           COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed 's/\r\n/\n/g | sed -z 's/\n/\\n/g')"
           echo "$COMMIT_MESSAGE"
+          git log --pretty=format:"%s" -1 $GITHUB_SHA
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
       - name: Send custom JSON data to Slack workflow
