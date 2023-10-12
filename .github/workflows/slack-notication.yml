@@ -9,60 +9,13 @@ jobs:
       - name: Prepare Git commit message
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="$(echo "Release 2.9.9(173) to UAT (#1455)
-  
-          * feat: LAU-17242 jFrog migration
-  
-          Change Made:
-          - Updated luna sdk SHA to correct branch
-          - Removed Nexus repo and added jFrog repo
-          
-          * Updated LUNA SDK SHA
-          
-          * [Chore] Migrate from CircleCI to GH Actions (#1439)
-          
-          - Migrate CI/CD workflows from Circle CI to GitHub Actions
-          - Publish APKs to Appcenter instead of Nexus
-          
-          Note: Reduce JVM heap size as GH runner offers only 7GB of memory.
-          ---------
-          Co-authored-by: Pavana Salvankar <pavana_salvankar@discovery.com>
-          
-          * Made changes to pull request yml file
-          
-          Chang Made:
-          - Added jFrog credentials
-          
-          * fix: Replace new-line with '\n' to prevent invalid JSON payload error. (#1450)
-          
-          * Updated LUNA_SDK_SHA and pull request yml file
-  
-          * Updated JFROG_USERNAME and JFROG_TOKEN
-          
-          * updated github workflow
-          
-          * Addressed review comments
-          
-          * Updated private-build-and-upload yml file for review comments
-          
-          * Upgrade playServicesVersionAds to 21.3.0 (#1452)
-          
-          * -Upgraded targetSdkVersion to 33 (#1451)
-          
-          * Decoupling user entitlements status api (#1453)
-          
-          * Decoupling user entitlements status api
-          
-          * Added submodule dependency SHA keys
-          
-          * Updated version code 172 to 173 and versionName 2.9.8 to 2.9.9 (#1454)
-          
-          ---------
-          
-          Co-authored-by: Akshay Taru <akshay_taru@discovery.com>
-          Co-authored-by: Kartik Hegde <96985095+kartik-robosoftin@users.noreply.github.com>
-          Co-authored-by: Pavana Salvankar <pavana_salvankar@discovery.com>
-          Co-authored-by: akshaytaru <125434794+akshaytaru@users.noreply.github.com>" | sed -z 's/\n/\\n/g')"
+          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed 's/\r//g' | sed -z 's/\n/\\n/g')"
+          echo "$COMMIT_MESSAGE"
+          echo -n "$COMMIT_MESSAGE" | xxd -p -c 1 |
+          while read -r line; do
+            echo -n "$(( 16#$line ))"
+          done
+          git log --pretty=format:"%s" -1 $GITHUB_SHA
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
       - name: Send custom JSON data to Slack workflow
