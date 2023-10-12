@@ -9,8 +9,12 @@ jobs:
       - name: Prepare Git commit message
         id: slack-prepare
         run: |
-          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed 's/\r\n/\n/g' | sed -z 's/\n/\\n/g')"
+          COMMIT_MESSAGE="$(echo "${{ github.event.head_commit.message }}" | sed 's/\r//g' | sed -z 's/\n/\\n/g')"
           echo "$COMMIT_MESSAGE"
+          echo -n "$COMMIT_MESSAGE" | xxd -p -c 1 |
+          while read -r line; do
+            echo -n "$(( 16#$line ))"
+          done
           git log --pretty=format:"%s" -1 $GITHUB_SHA
           echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
 
