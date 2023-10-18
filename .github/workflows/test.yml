@@ -1,8 +1,7 @@
 name: Test matrix combos
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: test/merge-commit
 
 env:
   FASTLANE_LANE: "android dev_debugAndroidTV"
